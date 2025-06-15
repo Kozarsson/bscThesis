@@ -1,61 +1,14 @@
-// filepath: /Users/matyaskozar/Code/Thesis/test.rs
-
-// These are minimal mock/stub definitions for Committee and SignatureShare.
-// In your actual project, you would import these from your `committee.rs` file
-// or the relevant module, e.g., using:
-// `use crate::committee::{Committee, SignatureShare};`
-// or if this test module is a child of the module defining Committee:
-// `use super::{Committee, SignatureShare};`
-
-#[derive(Debug, Clone)]
-pub struct SignatureShare {
-    // Add fields relevant to your SignatureShare, e.g., signer_id, share_data
-    _id: u64, // Example field
-}
-
-impl SignatureShare {
-    // Example constructor for a dummy share
-    fn new(id: u64) -> Self {
-        SignatureShare { _id: id }
-    }
-}
-
-pub struct Committee {
-    // Add fields relevant to your Committee, e.g., public_keys, total_members
-    _member_count: usize, // Example field
-}
-
-impl Committee {
-    // Example constructor for a dummy committee
-    fn new(member_count: usize) -> Self {
-        Committee { _member_count: member_count }
-    }
-
-    // This is a mock implementation of verify_count for testing purposes.
-    // Replace this with your actual verify_count logic if it's part of Committee.
-    // If verify_count is complex or relies on external state, you might need
-    // more sophisticated mocking or test setup.
-    fn verify_count(&self, _message: &[u8], certificate: &[SignatureShare]) -> (usize, usize, usize) {
-        // For this basic test, let's assume verify_count simply returns
-        // the number of shares in the certificate as the number of verified shares.
-        let verified_count = certificate.len();
-        // Returns (verified_shares, total_shares_considered, errors_encountered)
-        (verified_count, certificate.len(), 0)
-    }
-
-    // This is the function you want to test, as provided in your prompt.
-    pub fn verify(&self, message: &[u8], certificate: &[SignatureShare], threshold: usize) -> bool {
-        let (verified, _, _) = self.verify_count(message, certificate);
-        verified >= threshold
-    }
-}
+use multisig::{
+    Committee,
+    SignatureShare,
+};
 
 #[cfg(test)]
 mod tests {
-    use super::*; // Imports Committee and SignatureShare from the mock definitions above
+    use super::*;
 
     #[test]
-    fn test_verify_basic_scenarios() {
+    fn test_verify_basic_scenarios_multisig() {
         // Setup a dummy committee
         let committee = Committee::new(5); // Example: committee with 5 conceptual members
 
@@ -63,7 +16,11 @@ mod tests {
         let message = b"Test message content";
 
         // Scenario 1: Enough shares to meet the threshold
-        let shares1: Vec<SignatureShare> = vec![SignatureShare::new(1), SignatureShare::new(2), SignatureShare::new(3)];
+        let shares1: Vec<SignatureShare> = vec!
+        [SignatureShare::new(1), 
+        SignatureShare::new(2), 
+        SignatureShare::new(3)
+        ];
         let threshold1 = 3;
         let result1 = committee.verify(message, &shares1, threshold1);
         println!(
