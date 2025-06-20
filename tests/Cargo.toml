@@ -4,5 +4,16 @@ version = "0.1.0"
 edition = "2024" 
 
 [dependencies]
+ed25519-dalek = { version = "2", features = ["serde"] }
+frost-ed25519 = "2.1"
+old_rand = { package = "rand", version = "0.8", features = ["std"] }
+
 roast = { path = "../roast" }
 multisig = { path = "../multisig" }
+
+# [dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "roast"
+harness = false
