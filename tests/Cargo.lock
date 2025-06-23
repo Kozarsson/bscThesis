@@ -975,12 +975,15 @@ dependencies = [
 name = "thesis"
 version = "0.1.0"
 dependencies = [
+ "bincode",
  "criterion",
  "ed25519-dalek",
  "frost-ed25519",
+ "hex",
  "multisig",
  "rand 0.8.5",
  "roast",
+ "serde",
 ]
 
 [[package]]
