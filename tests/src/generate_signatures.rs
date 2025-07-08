@@ -32,12 +32,12 @@ fn main() {
     // Define the FROST threshold parameters:
     // `n`: total number of participants
     // `t`: minimum number of participants required to sign
-    let n = 7;
-    let t = 5;
+    let n = 31;
+    let t = 21;
 
     // Define the message that the group will collectively sign.
     // This message remains constant across all signature generations.
-    let message = b"this is a test message for ROAST signature generation";
+    let message = b"Hello, world!";
 
     // --- Key Generation Phase (Performed only once) ---
     // Simulate a trusted dealer generating keys for a t-of-n FROST instance.

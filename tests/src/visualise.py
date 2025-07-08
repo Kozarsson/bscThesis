@@ -35,8 +35,8 @@ def format_median_value(value):
         return f'{value:.4g}' # General formatting to 4 significant figures
 
 # System size and threshold used for the title
-SYSTEM_SIZE = 1000
-THRESHOLD = 667
+SYSTEM_SIZE = 4
+THRESHOLD = 3
 
 
 csv_file_path_1 = f"/Users/matyaskozar/Desktop/benchmark results/{THRESHOLD}-out-of-{SYSTEM_SIZE}/frost/frost_initiation/base/raw.csv"
@@ -163,4 +163,8 @@ ax.set_title("Combined Benchmark Phases")
 ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95]) 
+
+# Add the figure caption at the bottom
+fig.text(0.5, 0.01, 'Figure 2: Computation time (per phase) for a 3-out-of-4 system', ha='center', va='bottom', fontsize=10)
+
 plt.show()
