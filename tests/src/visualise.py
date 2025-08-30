@@ -48,11 +48,11 @@ csv_file_path_6 = f"/Users/matyaskozar/Desktop/benchmark results/{THRESHOLD}-out
 csv_file_path_7 = f"/Users/matyaskozar/Desktop/benchmark results/{THRESHOLD}-out-of-{SYSTEM_SIZE}/multisig/multisig_verify/base/raw.csv"
 
 # Extract data from each of the 7 CSV files (data must be in nanoseconds per iteration)
-d1 = extract_measurements_from_csv(csv_file_path_1) # FROST Initiation
+d1 = extract_measurements_from_csv(csv_file_path_1) # FROST initialisation
 d2 = extract_measurements_from_csv(csv_file_path_2) # FROST Signing
 d3 = extract_measurements_from_csv(csv_file_path_3) # FROST Aggregation
 d4 = extract_measurements_from_csv(csv_file_path_4) # FROST Verification
-d5 = extract_measurements_from_csv(csv_file_path_5) # Multisig Initiation
+d5 = extract_measurements_from_csv(csv_file_path_5) # Multisig initialisation
 d6 = extract_measurements_from_csv(csv_file_path_6) # Multisig Signing
 d7 = extract_measurements_from_csv(csv_file_path_7) # Multisig Verification
 
@@ -71,7 +71,7 @@ BOX_PATCH_COLOR = 'lightgray'
 
 all_data_ns = [d1, d5, d2, d6, d4, d7, d3]
 all_labels = [
-    "FROST Initiation", "Multisig Initiation",
+    "FROST Initialisation", "Multisig Initialisation",
     "FROST Signing", "Multisig Signing",
     "FROST Verification", "Multisig Verification",
     "FROST Aggregation"
@@ -165,6 +165,6 @@ ax.grid(axis='y', linestyle='--', alpha=0.7)
 plt.tight_layout(rect=[0, 0.03, 1, 0.95]) 
 
 # Add the figure caption at the bottom
-fig.text(0.5, 0.01, 'Figure 2: Computation time (per phase) for a 3-out-of-4 system', ha='center', va='bottom', fontsize=10)
+# fig.text(0.5, 0.01, 'Figure 1: Computation time (per phase) for a 3-out-of-4 system', ha='center', va='bottom', fontsize=10)
 
 plt.show()
