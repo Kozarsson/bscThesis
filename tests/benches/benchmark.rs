@@ -5,8 +5,9 @@ use std::collections::BTreeMap;
 use old_rand;
 use multisig::{Committee, KeypairShare, Signer};
 use thesis::frost;
+use std::mem;
 
-const SYSTEM_SIZE: usize = 5000;
+const SYSTEM_SIZE: usize = 30;
 const THRESHOLD: usize = (2 * SYSTEM_SIZE + 1 + 2) / 3;
 
 const MESSAGE: &[u8] = b"HELLO WORLD"; 
@@ -17,9 +18,9 @@ fn multisig_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("multisig");
     group.sampling_mode(criterion::SamplingMode::Flat);
 
-    // --- 1. Benchmark: Initiation (Key Generation and Committee Creation) ---
+    // --- 1. Benchmark: initialisation (Key Generation and Committee Creation) ---
     // This measures the time to generate all participant key shares and build the committee.
-    group.bench_function("multisig_initiation", |b| {
+    group.bench_function("multisig_initialisation", |b| {
         b.iter(|| {
             // Key generation for all participants
             let participants = (0..SYSTEM_SIZE).map(|_| KeypairShare::default()).collect::<Vec<_>>();
@@ -65,6 +66,17 @@ fn multisig_bench(c: &mut Criterion) {
         });
     });
 
+    let mut total_multisig_cert_size = 0;
+    if !certificate.is_empty() {
+        for sig_share in &certificate {
+            total_multisig_cert_size += mem::size_of_val(sig_share);
+        }
+        println!("Multisig: Total size of certificate ({} shares): {} bytes", certificate.len(), total_multisig_cert_size);
+    } else {
+         println!("Multisig: Certificate is empty, cannot determine size.");
+    }
+
+
     group.finish();
 }
 
@@ -81,7 +93,7 @@ fn frost_bench(c: &mut Criterion) {
     let mut rng = old_rand::thread_rng();
 
     // 1. Benchmark: FROST Setup (Distributed Key Generation (DKG))
-    group.bench_function("frost_initiation", |b| {
+    group.bench_function("frost_initialisation", |b| {
         b.iter(|| {
             let mut iter_rng = old_rand::thread_rng();
             frost::setup(&settings, &mut iter_rng).unwrap();
@@ -95,7 +107,6 @@ fn frost_bench(c: &mut Criterion) {
     // group.bench_function("commitments", |b| {
     //     b.iter(|| {
     //         let mut iter_rng = old_rand::thread_rng();
-    //         // Use the pre-generated package for the commitment phase.
     //         frost::vote_commitments(&settings, &package, &mut iter_rng).unwrap();
     //     });
     // });
@@ -148,6 +159,7 @@ fn frost_bench(c: &mut Criterion) {
         &signature_shares,
         package.public(),
     ).unwrap();
+    println!("FROST: Total size of signature: {} bytes", mem::size_of_val(&group_signature));
 
     // 4. Benchmark: FROST Verification (of the aggregated signature)
     group.bench_function("frost_verify", |b| {
